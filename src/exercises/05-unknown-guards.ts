@@ -16,18 +16,18 @@ export interface User {
  *
  * You may NOT cast with `as User`. Narrow properly. */
 
-// TODO: return type must be `value is User`
-export function isUser(value: unknown): ___ {
-  // TODO: check typeof object, not null, and the two fields' types
+export function isUser(value: unknown): value is User {
+  return typeof value === "object" && value !== null &&
+    "id" in value && typeof (value as { id?: unknown }).id === "number" &&
+    "email" in value && typeof (value as { email?: unknown }).email === "string";
 }
 
 /* ---- 5b. Safe parse ----
  * `parseUser` takes an `unknown` (e.g. the result of JSON.parse) and
  * returns a User if it is one, or null otherwise. Use isUser. */
 
-// TODO: returns User | null
-export function parseUser(value: unknown): ___ {
-  // TODO
+export function parseUser(value: unknown): User | null {
+  return isUser(value) ? value : null;
 }
 
 /* ---- 5c. assertNever-style guard on a primitive union ----
@@ -36,9 +36,16 @@ export function parseUser(value: unknown): ___ {
  *   - string -> parsed with Number(); if NaN, throw an Error
  * Narrow with typeof; do not use `any`. */
 
-// TODO
 export function toInt(value: string | number): number {
-  // TODO
+  if (typeof value === "number") {
+    return value;
+  }
+
+  const parsed = Number(value);
+  if (Number.isNaN(parsed)) {
+    throw new Error("Invalid integer value");
+  }
+  return parsed;
 }
 
 // These run in the test harness:
