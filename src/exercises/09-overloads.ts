@@ -12,11 +12,13 @@
  * The implementation signature may use `string | number`, but the two
  * PUBLIC overloads must be declared above it. */
 
-// TODO: overload signature 1 (string -> string[])
-// TODO: overload signature 2 (number -> number[])
-// TODO: implementation
-export function parseInput(value: ___): ___ {
-  // TODO: if string, split on ","; if number, return [value]
+export function parseInput(value: string): string[];
+export function parseInput(value: number): number[];
+export function parseInput(value: string | number): string[] | number[] {
+  if (typeof value === "string") {
+    return value.split(",");
+  }
+  return [value];
 }
 
 /* ---- 9b. Prove the overloads resolve ----
